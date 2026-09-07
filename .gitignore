@@ -16,7 +16,7 @@ dist/
 *.iws
 
 # 运行时上传文件（图片/视频）
-files/
+# 保留根目录 files/（房源图片），排除 springboot/files/（历史残留）
 springboot/files/
 
 # 日志
