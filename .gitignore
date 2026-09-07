@@ -6,6 +6,7 @@ node_modules/
 springboot/target/
 my-vue3-project/dist/
 dist/
+.vite/
 
 # IDE
 .idea/
