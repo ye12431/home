@@ -1,0 +1,32 @@
+# 依赖
+node_modules/
+**/node_modules/
+
+# 构建产物
+springboot/target/
+my-vue3-project/dist/
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# 运行时上传文件（图片/视频）
+files/
+springboot/files/
+
+# 日志
+*.log
+logs/
+
+# 系统
+.DS_Store
+Thumbs.db
+
+# 环境配置
+.env
+.env.local
+application-local.yml

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.springboot.Mapper.UserMapper">
+    <!-- namespace：必须和Mapper接口全类名一致 -->
+    <select id="selectAll">
+        select *from user
+    </select>
+
+    <select id="selectUserByName">
+        select *from user where username = #{username}
+    </select>
+
+    <!--    注册时status默认为0-->
+    <insert id="insertUser">
+        insert into `user` (name,username,phone,password)
+        value(#{name},#{username},#{phone},#{password})
+    </insert>
+
+    <update id="updatePassword">
+        update `user`
+        set password = #{newPassword}
+        where id = #{id}
+
+    </update>
+    <update id="updateUserById">
+        update `user`
+        set name = #{name},username = #{username},phone = #{phone},avatar = #{avatar}
+        where id = #{id}
+    </update>
+
+    <update id="updateUserStatus">
+        update `user`
+        set status = case when status = 0 then 1 else 0 end
+        where id = #{id}
+    </update>
+
+    <select id="selectMyCollect" resultType="house.springboot.entity.HouseInfo">
+        SELECT h.id, h.title, h.address, h.price, h.area, h.room_number, h.status, h.user_id,
+        (SELECT MIN(i.url) FROM house_image i WHERE i.house_id = h.id) as url
+        FROM `house_list` h
+        INNER JOIN `house_collect` c ON h.id = c.house_id
+        WHERE c.user_id = #{userId}
+    </select>
+
+    <delete id="deleteUser">
+        delete from `user` where id = #{id}
+    </delete>
+    <delete id="deleteMyCollect">
+        delete from `house_collect` where house_id = #{houseId}
+    </delete>
+
+
+</mapper>

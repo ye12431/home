@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.springboot.Mapper.HouseCollectMapper">
+    <insert id="insertHouseCollect">
+        insert into `house_collect`(user_id, house_id)
+        values(#{userId},#{houseId})
+    </insert>
+
+    <select id="isCollect">
+        select *from `house_collect` where user_id = #{userId} and house_id = #{houseId}
+    </select>
+
+    <delete id="deleteCollect">
+        delete from `house_collect` where user_id = #{userId} and house_id = #{houseId}
+    </delete>
+</mapper>

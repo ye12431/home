@@ -1,0 +1,15 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+#    问号前面是自己的库名
+    url: jdbc:mysql://localhost:3306/house?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  type-aliases-package: house.springboot.entity  # 实体类包路径
+  mapper-locations: classpath:mapper/*.xml  # Mapper XML 文件路径
+  configuration:
+    map-underscore-to-camel-case: true  # 开启链峰命名转换

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.springboot.Mapper.BookingMapper">
+    <insert id="insertBooking">
+        insert into `booking` (time, user_id, house_id, phone, note, status)
+        value(#{time}, #{userId}, #{houseId}, #{phone}, #{note}, #{status})
+    </insert>
+
+    <select id="selectBookingByLandlordId">
+        SELECT b.*,h.title, h.user_id AS landlord_id FROM `booking` AS b
+        LEFT JOIN `house_list` AS h ON h.id = b.house_id
+        WHERE h.user_id = #{landlordId}
+    </select>
+    <select id="selectMyBooking" resultType="house.springboot.entity.HouseInfo">
+        SELECT b.*,h.title FROM `booking` b
+        LEFT JOIN `house_list` h ON h.id = b.house_id
+        WHERE b.user_id = #{userId}
+    </select>
+    <delete id="deleteMyBooking">
+        delete from `booking` where id = #{id}
+    </delete>
+
+    <update id="updateStatus">
+        update`booking`
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+</mapper>

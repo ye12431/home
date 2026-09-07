@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.springboot.Mapper.HouseListMapper">
+    <!-- namespace：必须和 Mapper 接口全类名一致 -->
+
+    <!--    //房源页面查询-->
+    <select id="selectAllHouseList" resultType="house.springboot.entity.HouseList">
+        select * from `house_list`
+        <where>
+            status = 1
+            <if test="address != null and address !='' ">
+                and address like concat('%',#{address},'%')
+            </if>
+            <if test="price != null and price !=''">
+                <choose>
+                    <when test="price == '0-1000'">
+                        and price &lt; 1000
+                    </when>
+                    <when test="price == '1000-2000'">
+                        and price between 1000 and 2000
+                    </when>
+                    <when test="price == '2000-3000'">
+                        and price between 2000 and 3000
+                    </when>
+                    <when test="price == '5000-'">
+                        and price >= 5000
+                    </when>
+                </choose>
+            </if>
+            <if test="roomNumber != null and roomNumber != '' ">
+                and room_number = #{roomNumber}
+            </if>
+        </where>
+    </select>
+    <!--    我的房源查询-->
+    <select id="myHouseSearch" resultType="house.springboot.entity.HouseList">
+        select *from `house_list`
+        <where>
+            <if test="status != null and status !=''">
+                status = #{status}
+            </if>
+
+            <if test="title != null and title !='' ">
+                and title like concat('%',#{title},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectHouseListByUserId" resultType="house.springboot.entity.HouseInfo">
+        select *from `house_list` where user_id = #{userId}
+    </select>
+    <select id="selectAllHouseListById" resultType="house.springboot.entity.HouseInfo">
+        SELECT u.`avatar`,u.`phone`,u.`name`, h.* FROM `house_list` h
+        LEFT JOIN `user` u ON h.`user_id` = u.`id`
+        WHERE h.`id` = #{id}
+    </select>
+    <!--    查找精品房源-->
+    <select id="exquisiteHouse">
+        SELECT h.*,MIN(i.`url`) as urls FROM `house_list` AS h
+        LEFT JOIN `house_image` AS i ON h.`id` = i.`house_id`
+        where status = 1
+        GROUP BY h.`id`
+        ORDER BY id ASC LIMIT 12
+    </select>
+    <!--    房源管理-->
+    <select id="adminHouseList">
+        SELECT h.*,u.`name` FROM `house_list` h
+        LEFT JOIN `user` u ON h.`user_id` = u.`id`
+    </select>
+    <insert id="insertHouseList" useGeneratedKeys="true" keyProperty="id">
+        insert into `house_list`
+        (title,address,area,room_number,details,user_id,price)
+        value(#{title},#{address},#{area},#{roomNumber},#{details},#{userId},#{price})
+    </insert>
+
+    <update id="updateHouseList">
+        update `house_list`
+        set title = #{title}, address = #{address}, area = #{area}, room_number = #{roomNumber}, details = #{details},
+        price = #{price}, status = 0
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHouseList">
+        delete from `house_list` where id = #{id}
+    </delete>
+    <!--    //admin页面房源-->
+    <!--    //查找未审核房源-->
+    <select id="selectByStatus">
+        select *from `house_list` where status = 0
+    </select>
+    <!--    //审核房源-->
+    <update id="updateByHouseStatus">
+        update `house_list`
+        set status = #{status}
+        where id = #{id}
+    </update>
+</mapper>

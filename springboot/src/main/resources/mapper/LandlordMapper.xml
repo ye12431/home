@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house.springboot.Mapper.LandlordMapper">
+    <select id="selectAllLandlord">
+        select *from `landlord`
+    </select>
+
+    <insert id="insertLandlord">
+        insert into `landlord` (name,username,card_id,phone,user_id,photo)
+        value (#{name},#{username},#{cardId},#{phone},#{userId},#{photo})
+    </insert>
+
+    <update id="updateLandlordStatus">
+        update `user` as u join `landlord` as l on u.id = l.user_id
+        <if test="status == 1">
+            set u.role = '房东', l.status = 1
+        </if>
+        <if test="status == 2">
+            set l.status = 2
+        </if>
+        where l.id = #{id}
+    </update>
+</mapper>
