@@ -126,7 +126,7 @@
       <el-form :model="appointmentForm" :rules="appointmentRules" ref="appointmentFormRef" label-width="100px">
         <el-form-item label="预约时间" prop="appointmentTime">
           <el-date-picker v-model="appointmentForm.appointmentTime" type="datetime" placeholder="选择预约时间"
-            style="width: 100%;" />
+            :disabled-date="disablePastDate" style="width: 100%;" />
         </el-form-item>
         <el-form-item label="联系电话" prop="contactPhone">
           <el-input v-model="appointmentForm.contactPhone" placeholder="请输入联系电话" />
@@ -214,6 +214,13 @@ const goBack = () => {
   router.push('/house-list');
 };
 
+// 禁用过去日期
+const disablePastDate = (date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date.getTime() < today.getTime();
+};
+
 // 预约看房
 const handleAppointment = () => {
   appointmentVisible.value = true;
@@ -223,7 +230,20 @@ const handleAppointment = () => {
 const submitAppointment = () => {
   appointmentFormRef.value.validate((valid) => {
     if (valid) {
-      request.post("/appointment/add", appointmentForm).then(res => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) {
+        ElMessage.warning('请先登录');
+        return;
+      }
+      const booking = {
+        userId: user.id,
+        houseId: houseId,
+        time: appointmentForm.appointmentTime,
+        phone: appointmentForm.contactPhone,
+        note: appointmentForm.remark,
+        status: 0
+      };
+      request.put("/booking/insertBooking", booking).then(res => {
         if (res.code === "200") {
           ElMessage.success('预约成功');
           appointmentVisible.value = false;

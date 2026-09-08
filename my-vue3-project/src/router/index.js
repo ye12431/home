@@ -3,6 +3,10 @@ import Home from '../views/Home.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior() {
+    // 每次路由跳转都回到页面顶部
+    return { top: 0 }
+  },
   routes: [
     {
       path: '/',

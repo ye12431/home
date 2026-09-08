@@ -100,15 +100,15 @@
           <el-input v-model="form.address" placeholder="请输入详细地址" />
         </el-form-item>
         <el-form-item label="租金" prop="price">
-          <el-input-number v-model="form.price" :min="0" style="width: 200px;" />
+          <el-input-number v-model="form.price" :min="0" style="width: 200px;" @focus="($event.target.select())" />
           <span style="margin-left: 10px;">元/月</span>
         </el-form-item>
         <el-form-item label="面积" prop="area">
-          <el-input-number v-model="form.area" :min="0" style="width: 200px;" />
+          <el-input-number v-model="form.area" :min="0" style="width: 200px;" @focus="($event.target.select())" />
           <span style="margin-left: 10px;">㎡</span>
         </el-form-item>
         <el-form-item label="房间数" prop="roomNumber">
-          <el-input-number v-model="form.roomNumber" :min="1" :max="10" style="width: 200px;" />
+          <el-input-number v-model="form.roomNumber" :min="1" :max="10" style="width: 200px;" @focus="($event.target.select())" />
         </el-form-item>
         <el-form-item label="房源描述" prop="details">
           <el-input v-model="form.details" type="textarea" :rows="4" placeholder="请输入房源描述" />

@@ -235,7 +235,20 @@ const handleAppointment = (item) => {
 const submitAppointment = () => {
   appointmentFormRef.value.validate((valid) => {
     if (valid) {
-      request.post("/appointment/add", appointmentForm).then(res => {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      if (!user.id) {
+        ElMessage.warning('请先登录');
+        return;
+      }
+      const booking = {
+        userId: user.id,
+        houseId: appointmentForm.houseId,
+        time: appointmentForm.appointmentTime,
+        phone: appointmentForm.contactPhone,
+        note: appointmentForm.remark,
+        status: 0
+      };
+      request.put("/booking/insertBooking", booking).then(res => {
         if (res.code === "200") {
           ElMessage.success('预约成功');
           appointmentVisible.value = false;
